@@ -1,0 +1,17 @@
+{
+    "name": "valentine/backend",
+    "autoload": {
+        "psr-4": {
+            "Valentine\\Backend\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "'valentine'",
+            "email": "valentinedinyelu67@gmail.com"
+        }
+    ],
+    "require": {
+        "firebase/php-jwt": "^7.2"
+    }
+}
