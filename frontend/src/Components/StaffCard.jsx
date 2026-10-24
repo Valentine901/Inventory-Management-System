@@ -9,7 +9,7 @@ const StaffCard = ({staff, isMenuOpen, onToggleMenu, onEdit, onDelete}) => {
             {/* is_active indicator: note is active is returned at int from response */}
             {staff.is_active === 1 && <div
                 role="menu"
-                className="absolute top-3 left-3 z-50"
+                className="absolute top-3 left-3"
             >
                 <div className="h-4 w-4 rounded-full bg-green-600"></div>
             </div>}

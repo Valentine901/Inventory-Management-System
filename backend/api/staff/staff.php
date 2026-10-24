@@ -24,7 +24,8 @@ echo json_encode([
     "id" => $staff["id"],
     "member_id" => $staff["member_id"],
     "username" =>  $staff["username"],
-    "email" => $staff["email"]
+    "email" => $staff["email"],
+    "role" => $staff["role"]
 ]);
 
 exit();

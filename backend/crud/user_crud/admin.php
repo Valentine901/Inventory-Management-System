@@ -47,6 +47,14 @@ class BaseAdmin{
         $result = $statement -> fetch(PDO::FETCH_ASSOC);
         return $result ? $result : false;
     }
+
+    public function get_user_by_id(int $user_id){
+        $sql = "SELECT * FROM users WHERE id = :id";
+        $statement = $this -> conn -> prepare($sql);
+        $statement -> execute(["id" => $user_id]);
+        $result = $statement -> fetch(PDO::FETCH_ASSOC);
+        return $result ? $result : false;
+    }
 }
 
 $base_admin = new BaseAdmin($connection_db);

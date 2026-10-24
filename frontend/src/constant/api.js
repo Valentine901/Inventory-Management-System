@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const BASE_URL = "http://localhost/phpcodes/inventory-management-system/backend/api";
-
+export const BASE_IMAGE_URL = "http://localhost/phpcodes/inventory-management-system/backend/images/product"
 export const API = axios.create({
     baseURL:BASE_URL,
     withCredentials: true

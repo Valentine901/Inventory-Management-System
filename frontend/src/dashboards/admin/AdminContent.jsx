@@ -1,6 +1,9 @@
-import { Calendar, ShoppingCart, Boxes, Users, UsersRound, User, UserPlus, Truck, UserRoundPlus } from "lucide-react";
+import { Calendar, ShoppingCart, Boxes, Users, UsersRound, User, UserPlus, Truck, UserRoundPlus, Tags, Box, Star, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import CreateStaff from "./CreateStaff";
+import CreateStaff from "./staff/CreateStaff";
+import CreateCategory from "./category/CreateCategory";
+import CreateSupplier from "./supplier/CreateSupplier";
+import CreateProduct from "./product/CreateProduct";
 import NotificationModal from "../../Components/NotificationModal";
 
 const getFormattedDate = () => {
@@ -30,19 +33,6 @@ const STAT_ITEMS = [
 
 
 
-const RECENT_ORDERS = [
-  { id: "ORD-1042", customer: "Amaka Obi", amount: 12500, status: "completed" },
-  { id: "ORD-1041", customer: "Chidi Eze", amount: 8300, status: "pending" },
-  { id: "ORD-1040", customer: "Ngozi Uche", amount: 21000, status: "completed" },
-  { id: "ORD-1039", customer: "Tunde Bello", amount: 4500, status: "cancelled" },
-];
-
-const LOW_STOCK = [
-  { name: "Rice 50kg", left: 3 },
-  { name: "Vegetable Oil 5L", left: 5 },
-  { name: "Sugar 1kg", left: 8 },
-];
-
 const STATUS_STYLES = {
   completed: "bg-emerald-100 text-emerald-700",
   pending: "bg-amber-100 text-amber-700",
@@ -52,15 +42,23 @@ const STATUS_STYLES = {
 import { useToast } from "../../context/ToastContext";
 const AdminContent = () => {
   const [addStaff, setAddStaff] = useState(false);
+  const [addCategory, setAddCategory] = useState(false);
+  const [addSupplier, setAddSupplier] = useState(false);
+  const [triggerModal, setTriggerModal] = useState(null);
   const { message } = useToast();
 
+  function onCloseTrigger (){
+    setTriggerModal(null);
+  }
 
 
   const ADMIN_ACTIONS = [
-    { label: "New Staff", icon: UserPlus, onClick: () => { setAddStaff(true) } },
-    { label: "New Order", icon: ShoppingCart, onClick: () => { } },
-    { label: "Supplier", icon: Truck, onClick: () => { } },
+    { label: "Staff", icon: UserPlus, onClick: () => { setAddStaff(true); setTriggerModal("staff"); } },
+    { label: "Categories", icon: Tags, onClick: () => { setAddCategory(true); setTriggerModal("category"); } },
+    { label: "Supplier", icon: Truck, onClick: () => { setAddSupplier(true); setTriggerModal("supplier");} },
     { label: "Customer", icon: UserRoundPlus, onClick: () => { } },
+    { label: "Product", icon: Box, onClick: () => {setTriggerModal("product"); } },
+    { label: "Order", icon: ShoppingCart, onClick: () => { } },
   ];
 
   return (
@@ -99,7 +97,10 @@ const AdminContent = () => {
       </div>
 
       {/* quick actions modal forms */}
-      {addStaff && <CreateStaff onClose={() => setAddStaff(false)} />}
+      {triggerModal === "staff" && <CreateStaff onClose={onCloseTrigger} />}
+      {triggerModal === "category" && <CreateCategory onClose={onCloseTrigger} />}
+      {triggerModal === "supplier" && <CreateSupplier onClose={onCloseTrigger} />}
+      {triggerModal === "product" && <CreateProduct onClose={onCloseTrigger} />}
 
       {/* quick actions */}
       <section className="flex flex-col gap-3">
@@ -118,60 +119,6 @@ const AdminContent = () => {
           ))}
         </div>
       </section>
-
-      {/* recent orders + low stock */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-        {/* recent orders */}
-        <section className="lg:col-span-2 p-4 rounded-xl bg-white shadow-sm flex flex-col gap-3">
-          <h2 className="font-semibold text-zinc-800">Recent orders</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left min-w-[420px]">
-              <thead>
-                <tr className="text-zinc-500 border-b border-zinc-200">
-                  <th className="py-2 font-medium">Order</th>
-                  <th className="py-2 font-medium">Customer</th>
-                  <th className="py-2 font-medium">Amount</th>
-                  <th className="py-2 font-medium">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {RECENT_ORDERS.map((order) => (
-                  <tr key={order.id} className="border-b border-zinc-100 last:border-0">
-                    <td className="py-3 font-medium text-zinc-800">{order.id}</td>
-                    <td className="py-3 text-zinc-600">{order.customer}</td>
-                    <td className="py-3 text-zinc-800">₦{order.amount.toLocaleString()}</td>
-                    <td className="py-3">
-                      <span
-                        className={`px-2.5 py-1 rounded-full text-xs font-semibold capitalize ${STATUS_STYLES[order.status]}`}
-                      >
-                        {order.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        {/* low stock */}
-        <section className="p-4 rounded-xl bg-white shadow-sm flex flex-col gap-3">
-          <h2 className="font-semibold text-zinc-800">Low stock</h2>
-          <ul className="flex flex-col gap-2">
-            {LOW_STOCK.map((item) => (
-              <li
-                key={item.name}
-                className="flex items-center justify-between gap-3 p-3 rounded-lg bg-zinc-50"
-              >
-                <span className="text-sm text-zinc-700 truncate">{item.name}</span>
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-red-100 text-red-600 shrink-0">
-                  {item.left} left
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
 
     </div>
   );

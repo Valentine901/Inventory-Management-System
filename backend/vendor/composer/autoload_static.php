@@ -11,6 +11,10 @@ class ComposerStaticInitbc9c32a8882921c5e87a310b903457a3
         array (
             'Valentine\\Backend\\' => 18,
         ),
+        'S' =>
+        array (
+            'Symfony\\Component\\EventDispatcher\\' => 34,
+        ),
         'F' =>
         array (
             'Firebase\\JWT\\' => 13,
@@ -22,9 +26,27 @@ class ComposerStaticInitbc9c32a8882921c5e87a310b903457a3
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
+        'Symfony\\Component\\EventDispatcher\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
+        ),
         'Firebase\\JWT\\' =>
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
+    );
+
+    public static $prefixesPsr0 = array (
+        'G' =>
+        array (
+            'Guzzle\\Tests' =>
+            array (
+                0 => __DIR__ . '/..' . '/guzzle/guzzle/tests',
+            ),
+            'Guzzle' =>
+            array (
+                0 => __DIR__ . '/..' . '/guzzle/guzzle/src',
+            ),
         ),
     );
 
@@ -37,6 +59,7 @@ class ComposerStaticInitbc9c32a8882921c5e87a310b903457a3
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitbc9c32a8882921c5e87a310b903457a3::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitbc9c32a8882921c5e87a310b903457a3::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitbc9c32a8882921c5e87a310b903457a3::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitbc9c32a8882921c5e87a310b903457a3::$classMap;
 
         }, null, ClassLoader::class);

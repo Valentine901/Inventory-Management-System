@@ -13,12 +13,14 @@ class Config{
     public string $DB_PASS;
     public string $DB_NAME;
     public string $SECRET_KEY;
+    public string $BG_REMOVAL_API_KEY;
     public function __construct(array $env){
         $this -> DB_HOST = $env["DB_HOST"];
         $this -> DB_NAME = $env["DB_NAME"];
         $this -> DB_PASS = $env["DB_PASS"];
         $this -> DB_USER = $env["DB_USER"];
         $this -> SECRET_KEY = $env["SECRET_KEY"];
+        $this -> BG_REMOVAL_API_KEY = $env["BG_REMOVAL_API_KEY"];
     }
 }
 

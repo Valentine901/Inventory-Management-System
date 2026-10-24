@@ -7,5 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Valentine\\Backend\\' => array($baseDir . '/src'),
+    'Symfony\\Component\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher'),
     'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
 );

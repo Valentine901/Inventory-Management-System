@@ -1,7 +1,10 @@
 import AdminNavbar from "./AdminNavbar";
 import AdminContent from "./AdminContent";
 import AdminSidebar from "./AdminSidebar";
-import Staff from "./Staff";
+import Staff from "./staff/Staff";
+import Categories from "./category/Categories";
+import Product from "./product/Product";
+import Suppliers from "./supplier/Suppliers";
 import { useState } from "react";
 
 
@@ -13,6 +16,9 @@ const AdminDashboard = () => {
     switch(selected){
       case "staffs": return <Staff />
       case "dashboard": return <AdminContent />
+      case "categories": return <Categories />
+      case "suppliers": return <Suppliers />
+      case "products": return <Product />
       default : return <AdminContent />
     }
   }

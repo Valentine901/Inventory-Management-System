@@ -14,8 +14,8 @@ const AuthContextProvider = ({ children }) => {
         setLoading(true);
         try{
             const response = await API.get("/auth/get_current_user.php");
-            setUser(response.data);
-            SaveItemToLocalStorage("user", response.data);
+            setUser(response.data.data);
+            SaveItemToLocalStorage("user", response.data.data);
         } catch (error) {
             setUser(null);
             console.log(error.response.data.message);
