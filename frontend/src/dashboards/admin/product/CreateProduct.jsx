@@ -93,7 +93,7 @@ const CreateProduct = ({ onClose }) => {
     }
 
     return (
-        <div onClick={onClose} className='fixed inset-0 h-screen w-full bg-black/30 flex items-center justify-center px-5'>
+        <div onClick={onClose} className='fixed inset-0 h-screen w-full bg-black/50 z-99 flex items-center justify-center px-5'>
             <form onClick={(e) => e.stopPropagation()} onSubmit={handleSubmit} className='bg-white max-w-xl rounded-xl w-full p-4 flex flex-col gap-2'>
 
 

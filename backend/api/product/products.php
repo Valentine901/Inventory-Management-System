@@ -10,9 +10,14 @@ header("Content-Type:application/json");
 
 require_permission("view.products", $base_auth, $base_admin);
 
-$products = $base_product->products();
+$limit = isset($_GET["limit"]) ?  (int)$_GET['limit'] : 4;
+$page = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
+
+$offset = ($page - 1) * $limit;
+
+$response = $base_product->products($limit, $offset);
 http_response_code(200);
-echo json_encode(["products" => $products]);
+echo json_encode(["products" => $response["products"], "totalProduct" => $response["totalProduct"]]);
 
 
 

@@ -3,6 +3,7 @@ import AdminContent from "./AdminContent";
 import AdminSidebar from "./AdminSidebar";
 import Staff from "./staff/Staff";
 import Categories from "./category/Categories";
+import Customers from "./customer/Customers";
 import Product from "./product/Product";
 import Suppliers from "./supplier/Suppliers";
 import { useState } from "react";
@@ -19,6 +20,7 @@ const AdminDashboard = () => {
       case "categories": return <Categories />
       case "suppliers": return <Suppliers />
       case "products": return <Product />
+      case "customers": return <Customers />
       default : return <AdminContent />
     }
   }

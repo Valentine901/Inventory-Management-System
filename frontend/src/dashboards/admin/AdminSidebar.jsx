@@ -1,4 +1,4 @@
-import { Menu, Car, X, LayoutDashboard, Users, Tags, Box } from "lucide-react";
+import { Menu, Car, X, LayoutDashboard, Users, Tags, Box, User } from "lucide-react";
 
 const NAV_ITEMS = [
     { label: "dashboard", icon: LayoutDashboard },
@@ -6,6 +6,7 @@ const NAV_ITEMS = [
     { label: "products", icon: Box },
     { label: "categories", icon: Tags },
     { label: "suppliers", icon: Users },
+    { label: "customers", icon: User },
 ];
 
 const SidebarContent = ({ onClose, setSelected, selected }) => (

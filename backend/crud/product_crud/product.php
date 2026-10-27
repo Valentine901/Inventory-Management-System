@@ -43,7 +43,7 @@ class BaseProduct
         }
     }
 
-    public function products()
+    public function products(int $limit, int $offset): array
     {
         // GROUP_CONCAT take all the imgs that belong to single product and concatenate them together to give something like this : images => "A.png,B.png,C.png"
         $sql = "SELECT 
@@ -53,9 +53,11 @@ class BaseProduct
                 products.category_id,
                 products.quantity, 
                 GROUP_CONCAT(multiple_images.image) 
-                AS images FROM products LEFT JOIN multiple_images ON multiple_images.product_id = products.id GROUP BY products.id ORDER BY products.created_at DESC";
+                AS images FROM products LEFT JOIN multiple_images ON multiple_images.product_id = products.id GROUP BY products.id ORDER BY products.created_at DESC LIMIT :limit OFFSET :offset";
 
         $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(":limit", (int)$limit, PDO::PARAM_INT);
+        $stmt->bindValue(":offset", (int)$offset, PDO::PARAM_INT);
         $stmt->execute();
         $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -65,6 +67,12 @@ class BaseProduct
             // explode takes the GROUP_CONCA data and separate them with comma making it a real list
             // images => [A.png, B.png, C.png]
         }
+
+        $countQuery = "SELECT COUNT(*) FROM products";
+        $countStmt = $this->conn->prepare($countQuery);
+        $countStmt->execute();
+        $totalProduct = (int)$countStmt->fetchColumn();
+
 
 
         unset($product);
@@ -81,7 +89,7 @@ class BaseProduct
         //     // does nothing
         // }
         // print_r($nums);   // [2, 4, 4]  <- the last item changed!
-        return $products;
+        return ["products" => $products, "totalProduct" => $totalProduct];
     }
 
     public function getProduct($id) {

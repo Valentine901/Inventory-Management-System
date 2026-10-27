@@ -3,12 +3,20 @@ import { useState, useEffect } from "react";
 import ProductCard, { PRODUCT_GRID } from "./ProductCard";
 import EmptyState from "../../../Components/EmptyState";
 import { SearchIcon, X } from "lucide-react";
+import Pagination from "../../../Components/Pagination";
+
+
+
 const Product = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null);
   const [query, setQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItem, setTotalItem] = useState(0);
+  // limit is also total items per page
+  const limit = 4
 
   const toggleSearch = () => {
     setShowSearch((prev) => !prev);
@@ -19,8 +27,10 @@ const Product = () => {
   const handleFetchProducts = async () => {
     setLoading(true);
     try {
-      const data = await getProducts();
-      setProducts(data);
+      const data = await getProducts(currentPage, limit);
+      // console.log(data);
+      setProducts(data.products);
+      setTotalItem(data.totalProduct)
     } catch (error) {
       console.log(error.response.data.message);
     } finally {
@@ -28,14 +38,17 @@ const Product = () => {
     }
   }
 
+  const totalPages = Math.ceil(totalItem/limit);
+
 
   
-  useEffect(() => { handleFetchProducts() }, []);
+  useEffect(() => { handleFetchProducts() }, [currentPage]);
 
   const filteredProducts = products.filter((p) => {
     const name = p.name.toLowerCase().includes(query.toLowerCase());
     return name;
   })
+
 
   return (
     <div className='bg-purple-600/5 min-h-screen w-full p-4 flex flex-col gap-3 font-alt'>
@@ -69,7 +82,7 @@ const Product = () => {
 
       {loading && (
         <div className="flex flex-col gap-2 w-full animate-pulse">
-          {[1, 2, 3, 4, 5].map((num) => (
+          {[1, 2, 3, 4].map((num) => (
             <div
               key={num}
               className={`${PRODUCT_GRID} w-full rounded-xl bg-white border border-zinc-200 p-3`}
@@ -99,10 +112,12 @@ const Product = () => {
         <EmptyState />
       </div>)}
 
+      {filteredProducts.length === 0  && <EmptyState />}
+
       {!loading && products.length > 0 && (
+        <>
         <div className="flex flex-col gap-2">
 
-          {/* Header: hidden on mobile, same grid as the rows */}
           <div className={`${PRODUCT_GRID} hidden md:grid px-3 text-xs font-semibold uppercase text-gray-500`}>
             <span />
             <span>Name</span>
@@ -122,7 +137,11 @@ const Product = () => {
             onCloseMenu={() => setOpenMenuId(null)}
             />
           ))}
+
+    
         </div>
+        <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
+        </>
       )}
     </div>
   )

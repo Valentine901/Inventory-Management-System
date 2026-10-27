@@ -49,7 +49,7 @@ const CreateStaff = ({ onClose }) => {
 
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-4 font-alt"
+      className="fixed inset-0 z-99 flex items-start justify-center overflow-y-auto bg-black/50 p-4 font-alt"
     >
 
       <div

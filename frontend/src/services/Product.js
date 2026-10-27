@@ -15,9 +15,9 @@ export const createProduct = async (name, price, quantity, category_id, supplier
 }
 
 
-export const getProducts = async () => {
-    const res = await API.get("/product/products.php");
-    return res.data.products;
+export const getProducts = async (currentPage, limit) => {
+    const res = await API.get(`/product/products.php?page=${currentPage}&limit=${limit}`);
+    return res.data;
 }
 
 export const getProduct = async (id) => {

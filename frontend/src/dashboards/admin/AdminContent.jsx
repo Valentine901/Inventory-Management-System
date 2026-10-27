@@ -1,10 +1,12 @@
-import { Calendar, ShoppingCart, Boxes, Users, UsersRound, User, UserPlus, Truck, UserRoundPlus, Tags, Box, Star, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { Calendar, ShoppingCart, Boxes, Users, UsersRound, User, UserPlus, Truck, UserRoundPlus, Tags, Box } from "lucide-react";
+import { useState, useEffect } from "react";
 import CreateStaff from "./staff/CreateStaff";
 import CreateCategory from "./category/CreateCategory";
 import CreateSupplier from "./supplier/CreateSupplier";
 import CreateProduct from "./product/CreateProduct";
+import CreateCustomer from "./customer/CreateCustomer";
 import NotificationModal from "../../Components/NotificationModal";
+import { getStats } from "../../services/Stat";
 
 const getFormattedDate = () => {
   const today = new Date();
@@ -23,41 +25,56 @@ const getFormattedDate = () => {
   return `${day}${suffix} ${month}, ${year}`;
 };
 
-// Placeholder data: replace with your API responses
-const STAT_ITEMS = [
-  { label: "Total Products", total: 247, icon: Boxes, bg: "bg-blue-600" },
-  { label: "Total Staff", total: 152, icon: UsersRound, bg: "bg-green-600" },
-  { label: "Total Suppliers", total: 17, icon: Users, bg: "bg-purple-600" },
-  { label: "Total Customers", total: 231, icon: User, bg: "bg-orange-600" },
-];
 
 
-
-const STATUS_STYLES = {
-  completed: "bg-emerald-100 text-emerald-700",
-  pending: "bg-amber-100 text-amber-700",
-  cancelled: "bg-zinc-200 text-zinc-600",
-};
 
 import { useToast } from "../../context/ToastContext";
 const AdminContent = () => {
-  const [addStaff, setAddStaff] = useState(false);
-  const [addCategory, setAddCategory] = useState(false);
-  const [addSupplier, setAddSupplier] = useState(false);
-  const [triggerModal, setTriggerModal] = useState(null);
+  const [createModals, setCreateModals] = useState({trigger: ""});
   const { message } = useToast();
 
-  function onCloseTrigger (){
-    setTriggerModal(null);
+  const [stats, setStats] = useState({ total_products: 0, total_staff: 0, total_customer: 0, total_supplier: 0 });
+
+  // fetching admin stat
+  useEffect(() => {
+    async function fetchAdminStat() {
+      try {
+        const data = await getStats();
+        setStats({
+          total_products: data.totalProduct,
+          total_customer: data.totalCustomer,
+          total_staff: data.totalStaff,
+          total_supplier: data.totalSupplier
+        })
+      } catch (err) {
+        console.log(err.response.data.message);
+      }
+    }
+  fetchAdminStat();
+  }, []);
+
+
+
+  const STAT_ITEMS = [
+    { label: "Total Products", total: stats.total_products || 0, icon: Boxes, bg: "bg-blue-600" },
+    { label: "Total Staff", total: stats.total_staff || 0, icon: UsersRound, bg: "bg-green-600" },
+    { label: "Total Suppliers", total: stats.total_supplier || 0, icon: Users, bg: "bg-purple-600" },
+    { label: "Total Customers", total: stats.total_customer, icon: User, bg: "bg-orange-600" },
+  ];
+
+
+
+  function onCloseTrigger(){
+    setCreateModals((prev) => ({...prev, trigger:""}));
   }
 
-
   const ADMIN_ACTIONS = [
-    { label: "Staff", icon: UserPlus, onClick: () => { setAddStaff(true); setTriggerModal("staff"); } },
-    { label: "Categories", icon: Tags, onClick: () => { setAddCategory(true); setTriggerModal("category"); } },
-    { label: "Supplier", icon: Truck, onClick: () => { setAddSupplier(true); setTriggerModal("supplier");} },
-    { label: "Customer", icon: UserRoundPlus, onClick: () => { } },
-    { label: "Product", icon: Box, onClick: () => {setTriggerModal("product"); } },
+    { label: "Staff", icon: UserPlus, onClick: () => setCreateModals((prev) => ({...prev, trigger: "staff"})) },
+    { label: "Categories", icon: Tags, onClick: () => setCreateModals((prev) => ({...prev, trigger: "category"})) },
+    { label: "Supplier", icon: Truck, onClick: () => setCreateModals((prev) => ({...prev, trigger: "supplier"})) },
+    { label: "Customer", icon: UserRoundPlus, onClick: () => setCreateModals((prev) => ({...prev, trigger: "customer"})) },
+    { label: "Product", icon: Box, onClick: () => setCreateModals((prev) => ({...prev, trigger: "product"})) },
+
     { label: "Order", icon: ShoppingCart, onClick: () => { } },
   ];
 
@@ -96,11 +113,14 @@ const AdminContent = () => {
         ))}
       </div>
 
+      
+
       {/* quick actions modal forms */}
-      {triggerModal === "staff" && <CreateStaff onClose={onCloseTrigger} />}
-      {triggerModal === "category" && <CreateCategory onClose={onCloseTrigger} />}
-      {triggerModal === "supplier" && <CreateSupplier onClose={onCloseTrigger} />}
-      {triggerModal === "product" && <CreateProduct onClose={onCloseTrigger} />}
+      {createModals.trigger === "staff" && <CreateStaff onClose={onCloseTrigger} />}
+      {createModals.trigger === "category" && <CreateCategory onClose={onCloseTrigger} />}
+      {createModals.trigger === "supplier" && <CreateSupplier onClose={onCloseTrigger} />}
+      {createModals.trigger === "product" && <CreateProduct onClose={onCloseTrigger} />}
+      {createModals.trigger === "customer" && <CreateCustomer onClose={onCloseTrigger} />}
 
       {/* quick actions */}
       <section className="flex flex-col gap-3">

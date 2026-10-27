@@ -29,10 +29,10 @@ const CreateSupplier = ({ onClose }) => {
     setLoading(true);
 
     try {
-      console.log("creating supplier...")
+      // console.log("creating supplier...")
       await createSupplier(username, company, email);
       showNotification("New supplier added");
-      console.log("Done...")
+      // console.log("Done...")
       setUsername("");
       setEmail("");
       setCompany("");
@@ -49,7 +49,7 @@ const CreateSupplier = ({ onClose }) => {
 
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-4 font-alt"
+      className="fixed inset-0 z-99 flex items-start justify-center overflow-y-auto bg-black/50 p-4 font-alt"
     >
 
       <div
