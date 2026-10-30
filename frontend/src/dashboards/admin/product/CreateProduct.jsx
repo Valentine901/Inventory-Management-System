@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { getErrorMessage } from '../../../utils/getErrorMessage'
 import { useToast } from '../../../context/ToastContext'
-import { getSuppliers } from '../../../services/Supplier'
+import { getProductSuppliersSelection } from '../../../services/Supplier'
 import { getCategories } from '../../../services/Category'
 import { createProduct } from "../../../services/Product";
 import { X, ChevronDown } from 'lucide-react';
@@ -46,8 +46,8 @@ const CreateProduct = ({ onClose }) => {
     useEffect(() => {
         const loadSuppliers = async () => {
             try {
-                const data = await getSuppliers();
-                setSuppliers(data);
+                const data = await getProductSuppliersSelection();
+                setSuppliers(data.suppliers);
                 if(data.length) {
                     setFormData((prev) => ({...prev, supplier_id: data[0].id}))
                 }

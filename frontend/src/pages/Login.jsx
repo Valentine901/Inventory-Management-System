@@ -3,6 +3,8 @@ import { User, EyeClosed, Eye, Lock } from "lucide-react";
 import login_bg_img from "../assets/images/loginbdimg.png";
 import { login } from "../services/Auth";
 import { useNavigate } from "react-router-dom";
+import Loader from "../Components/Loader";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -10,6 +12,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const { GetCurrentUser } = useAuth();
 
     const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
@@ -25,7 +28,10 @@ const Login = () => {
 
         try {
             const { role } = await login(formData.identifier, formData.password);
+
+            await GetCurrentUser()
             navigate(role === "admin" ? "/admin-dashboard" : "/staff-dashboard");
+
         } catch (err) {
             setError(err.response?.data?.message ?? "Could not sign in");
         } finally {
@@ -41,6 +47,10 @@ const Login = () => {
         }, 3000)
         return () => clearTimeout(timer);
     }, [error])
+
+    if (loading) {
+        return <Loader />
+    }
 
     return (
         <div className="bg-purple-600/8 w-full min-h-screen font-alt flex items-center justify-center">

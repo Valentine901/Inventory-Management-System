@@ -7,6 +7,7 @@ import CreateProduct from "./product/CreateProduct";
 import CreateCustomer from "./customer/CreateCustomer";
 import NotificationModal from "../../Components/NotificationModal";
 import { getStats } from "../../services/Stat";
+import { GetItemFromLocalStorage } from "../../utils/LocalStorage";
 
 const getFormattedDate = () => {
   const today = new Date();
@@ -77,6 +78,7 @@ const AdminContent = () => {
 
     { label: "Order", icon: ShoppingCart, onClick: () => { } },
   ];
+  const loggedUser = GetItemFromLocalStorage("user");
 
   return (
     <div className="relative p-3 sm:p-6 flex flex-col gap-6 w-full bg-purple-600/5 font-alt min-h-screen">
@@ -86,7 +88,14 @@ const AdminContent = () => {
       {/* header: welcome message + date */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-col">
-          <span className="text-lg font-semibold text-black">Welcome back admin</span>
+          <div className="flex space-x-2 text-lg font-semibold text-black">
+            <span>
+              Welcome back 
+            </span>
+            <span className="text-purple-600">
+              {loggedUser?.username || "Admin"}
+            </span>
+          </div>
           <span className="text-sm text-zinc-600/70">Here is an overview of your store</span>
         </div>
         <div className="flex items-center gap-2 text-zinc-600/70 font-semibold">

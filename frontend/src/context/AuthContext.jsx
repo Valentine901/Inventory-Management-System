@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useContext, createContext} from "react";
-import { GetItemFromLocalStorage, SaveItemToLocalStorage } from "../utils/LocalStorage";
+import { GetItemFromLocalStorage, SaveItemToLocalStorage, ClearLocalStorage } from "../utils/LocalStorage";
 
 
 import { API } from "../constant/api";
@@ -24,11 +24,23 @@ const AuthContextProvider = ({ children }) => {
         }
     }
 
+    const Signout = async () => {
+        setLoading(true);
+        try{
+            await API.post("/auth/logout.php");
+            setUser(null);
+            ClearLocalStorage("user");
+        } catch (err) {
+            setUser(null);
+            ClearLocalStorage("user");
+        } finally{setLoading(false)}
+    }
+
     useEffect(() => {
         GetCurrentUser();
     }, [])
 
-    return <AuthContext.Provider value={{user, loading}}>
+    return <AuthContext.Provider value={{user, loading, Signout, loading, GetCurrentUser}}>
         {children}
         </AuthContext.Provider>
 }

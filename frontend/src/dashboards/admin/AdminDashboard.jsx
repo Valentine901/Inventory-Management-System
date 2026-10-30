@@ -7,10 +7,12 @@ import Customers from "./customer/Customers";
 import Product from "./product/Product";
 import Suppliers from "./supplier/Suppliers";
 import { useState } from "react";
+import Signout from "../../auth/Logout";
 
 
 const AdminDashboard = () => {
   const [showSidebar, setShowSidebar] = useState(false);
+  const [isSignout, setIsSignout] = useState(false);
   const [selected, setSelected] = useState("dashboard");
 
   const handleSwitchContent = () => {
@@ -30,9 +32,9 @@ const AdminDashboard = () => {
     <div className="flex w-full">
       {/* sidebar */}
       <div>
-        <AdminSidebar setSelected={setSelected} selected={selected} showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+        <AdminSidebar setIsSignout={setIsSignout} setSelected={setSelected} selected={selected} showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
       </div>
-
+       {isSignout && <Signout onClose={() => setIsSignout(false)} />}
       {/* navbar & content */}
       <div className="w-full">
         <AdminNavbar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />

@@ -10,10 +10,6 @@ const AdminNavbar = ({ showSidebar, setShowSidebar }) => {
             <div className="flex lg:hidden justify-end">
                 <Menu onClick={() => setShowSidebar(!showSidebar)} />
             </div>
-            <div className=""></div>
-            <div>
-                logout
-            </div>
         </div>
     )
 }

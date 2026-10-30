@@ -12,3 +12,8 @@ export const GetItemFromLocalStorage = (key) => {
     const saved = localStorage.getItem(key);
     return saved !== null ? JSON.parse(saved) : null
 }
+
+export const ClearLocalStorage = (key) => {
+    if (!key) return;
+    localStorage.removeItem(key);
+}

@@ -1,4 +1,4 @@
-import { Menu, Car, X, LayoutDashboard, Users, Tags, Box, User } from "lucide-react";
+import { LogOut, X, LayoutDashboard, Users, Tags, Box, User } from "lucide-react";
 
 const NAV_ITEMS = [
     { label: "dashboard", icon: LayoutDashboard },
@@ -9,7 +9,7 @@ const NAV_ITEMS = [
     { label: "customers", icon: User },
 ];
 
-const SidebarContent = ({ onClose, setSelected, selected }) => (
+const SidebarContent = ({ onClose, setSelected, selected, setIsSignout }) => (
     <>
         {/* header */}
         <div className="flex items-center justify-between px-4 py-4 z-99">
@@ -51,22 +51,26 @@ const SidebarContent = ({ onClose, setSelected, selected }) => (
                     </button>
                 )
             })}
+            <div onClick={() => {onClose(); setIsSignout(true)}} className="fixed z-99 bottom-5 flex space-x-3 bg-red-600/80 hover:bg-red-600 transition-all duration-300 cursor-pointer text-white p-3 rounded-sm w-60">
+                <LogOut />
+                <span>Logout</span>
+            </div>
         </nav>
     </>
 );
 
-const AdminSidebar = ({ showSidebar, setShowSidebar, setSelected, selected }) => {
+const AdminSidebar = ({ showSidebar, setShowSidebar, setSelected, selected, setIsSignout }) => {
     const close = () => setShowSidebar(false);
 
     return (
-        <div className="font-alt z-99 ">
+        <div className="font-alt z-99 h-full">
             {/* large screen sidebar */}
-            <aside className="hidden lg:block w-64 shrink-0 bg-purple-100 min-h-screen">
-                <SidebarContent setSelected={setSelected} selected={selected} />
+            <aside className="hidden h-full lg:block w-64 shrink-0 bg-purple-100 min-h-screen">
+                <SidebarContent setSelected={setSelected} selected={selected} setIsSignout={setIsSignout} onClose={close} />
             </aside>
 
             {/* small/medium screens sidebar */}
-            <div className="lg:hidden bg-purple-100 z-99">
+            <div className="lg:hidden bg-purple-100 z-99 h-full">
                 <div
                     onClick={close}
                     className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${showSidebar ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -78,7 +82,7 @@ const AdminSidebar = ({ showSidebar, setShowSidebar, setSelected, selected }) =>
                     className={`fixed inset-y-0 left-0 z-50 w-64 max-w-[80%] bg-purple-100 shadow-xl transition-transform duration-300 ${showSidebar ? "translate-x-0" : "-translate-x-full"
                         }`}
                 >
-                    <SidebarContent onClose={close} setShowSidebar={setShowSidebar} setSelected={setSelected} selected={selected} />
+                    <SidebarContent onClose={close} setShowSidebar={setShowSidebar} setSelected={setSelected} selected={selected} setIsSignout={setIsSignout} />
                 </aside>
             </div>
         </div>

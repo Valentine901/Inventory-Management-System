@@ -3,6 +3,7 @@ import { getErrorMessage } from "../../../utils/getErrorMessage";
 import { useToast } from "../../../context/ToastContext"
 import { getSuppliers, deleteSupplier, updateSupplier } from '../../../services/Supplier';
 import EmptyState from '../../../Components/EmptyState';
+import Pagination from "../../../Components/Pagination";
 
 import { SupplierCard } from './SupplierCard';
 
@@ -11,20 +12,25 @@ const Suppliers = () => {
     const [loading, setLoading] = useState(false);
     const { showNotification } = useToast();
     const [query, setQuery] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalItem, setTotalItem] = useState(0);
+    const limit = 4;
 
     useEffect(() => {
         fetchSuppliers();
-    }, [])
+    }, [currentPage])
 
     async function fetchSuppliers() {
         setLoading(true);
         try {
-            const data = await getSuppliers();
-            setItems(data);
+            const data = await getSuppliers(currentPage, limit);
+            setItems(data.suppliers);
+            setTotalItem(data.total_suppliers)
         } catch (err) {
             showNotification(getErrorMessage(err), "error");
         } finally { setLoading(false) };
     }
+
     const handleDeleteSupplier = async (id) => {
         setLoading(true);
         try {
@@ -55,6 +61,8 @@ const Suppliers = () => {
         const username = data.supplier_name.toLowerCase().includes(query.toLowerCase());
         return companyName || email || username;
     })
+
+    const totalPages = Math.ceil(totalItem / limit)
 
     return (
         <div className='p-4 sm:p-6 flex flex-col gap-6 w-full bg-purple-600/5 font-alt min-h-screen'>
@@ -92,6 +100,11 @@ const Suppliers = () => {
                                 onDelete={() => handleDeleteSupplier(item.id)}
                             />
                         ))}
+                        <Pagination 
+                        totalPages={totalPages}
+                        currentPage={currentPage} 
+                        setCurrentPage={setCurrentPage}
+                        />
                     </div>
                 )}
 

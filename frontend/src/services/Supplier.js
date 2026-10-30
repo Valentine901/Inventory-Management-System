@@ -20,7 +20,12 @@ export const getSupplier = async (supplier_id) => {
     return res.data.supplier;
 }
 
-export const getSuppliers = async () => {
-    const res = await API.get("/supplier/suppliers.php");
-    return res.data.suppliers;
+export const getSuppliers = async (page, limit) => {
+    const res = await API.get(`/supplier/suppliers.php?page=${page}&limit=${limit}`);
+    return res.data;
+}
+
+export const getProductSuppliersSelection = async () => {
+    const res = await API.get("/supplier/product_suppliers_selection.php");
+    return res.data;
 }

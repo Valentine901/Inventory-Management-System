@@ -30,13 +30,34 @@ class BaseSupplier
         return $result;
     }
 
-    public function get_suppliers()
+    public function get_suppliers(int $limit, int $offset)
+    {
+        $sql = "SELECT * FROM suppliers ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(":limit", (int)$limit, PDO::PARAM_INT);
+        $stmt->bindValue(":offset", (int)$offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $countQuery = "SELECT COUNT(*) FROM suppliers";
+        $stmt = $this->conn->prepare($countQuery);
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+
+        return [
+            "total_suppliers" => $count,
+            "suppliers" => $result
+        ];
+    }
+
+
+    public function product_suppliers_selection()
     {
         $sql = "SELECT * FROM suppliers ORDER BY created_at DESC";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $result ? $result : [];
+        return $result ?? [];
     }
 
     public function delete_supplier(int $id): bool

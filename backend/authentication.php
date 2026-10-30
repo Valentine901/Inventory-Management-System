@@ -27,6 +27,11 @@ class BaseAuth{
         }
     }
 
+    public function clear_token(){
+        setcookie("access_token", "", ["expires" => time() - (60 * 60 * 24)]);
+        setcookie("refresh_token", "", ["expires" => time() - (60 * 60 * 24 * 7)]); 
+    }
+
     public function hash_password($password): string {
         $hashed_pass = password_hash($password, PASSWORD_ARGON2I);
         return $hashed_pass;
